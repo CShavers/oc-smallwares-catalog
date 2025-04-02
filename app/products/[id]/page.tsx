@@ -12,7 +12,7 @@ interface ProductPageProps {
 }
 
 export default function ProductPage({ params }: ProductPageProps) {
-  const product = products.find((p) => p.id === params.id)
+  const product = products.find((p) => p.sku === params.id)
 
   if (!product) {
     notFound()
@@ -38,15 +38,13 @@ export default function ProductPage({ params }: ProductPageProps) {
 
         <div>
           <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-          <p className="text-2xl font-semibold mb-4">${product.price.toFixed(2)}</p>
           <div className="prose mb-6">
             <p>{product.description}</p>
           </div>
 
-          <AddToCartButton productId={product.id} />
+          <AddToCartButton productId={product.sku} />
         </div>
       </div>
     </div>
   )
 }
-
