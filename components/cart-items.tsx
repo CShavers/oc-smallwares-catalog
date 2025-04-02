@@ -36,7 +36,7 @@ export default function CartItems({ items }: CartItemsProps) {
           </div>
 
           <div className="flex-1">
-            <Link href={`/products/${item.productId}`}>
+            <Link href={`/products/${item.productSku}`}>
               <h3 className="font-medium hover:underline">{item.name}</h3>
             </Link>
             <p className="text-sm text-muted-foreground mb-2">${item.price.toFixed(2)}</p>

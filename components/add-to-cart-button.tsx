@@ -7,17 +7,17 @@ import { useToast } from "@/hooks/use-toast"
 import { addToCart } from "@/lib/actions"
 
 interface AddToCartButtonProps {
-  productId: string
+  productSku: string
 }
 
-export default function AddToCartButton({ productId }: AddToCartButtonProps) {
+export default function AddToCartButton({ productSku }: AddToCartButtonProps) {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [quantity, setQuantity] = useState(1)
 
   const handleAddToCart = async () => {
     setIsLoading(true)
-    await addToCart(productId, quantity)
+    await addToCart(productSku, quantity)
     setIsLoading(false)
     toast({
       title: "Added to cart",

@@ -1,7 +1,7 @@
 // In a real app, this would be stored in a database
 const orders: Record<string, any> = {}
 
-export async function getOrderById(id: string) {
+export async function getOrderById(sku: string) {
   // In a real app, you would fetch the order from a database
   return (
     orders[id] || {

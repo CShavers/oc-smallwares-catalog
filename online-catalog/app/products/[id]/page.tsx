@@ -7,7 +7,7 @@ import { products } from "@/lib/products"
 
 interface ProductPageProps {
   params: {
-    id: string
+    sku: string
   }
 }
 
@@ -43,7 +43,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             <p>{product.description}</p>
           </div>
 
-          <AddToCartButton productId={product.id} />
+          <AddToCartButton productSku={product.id} />
         </div>
       </div>
     </div>

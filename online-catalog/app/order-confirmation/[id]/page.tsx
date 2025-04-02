@@ -6,7 +6,7 @@ import { getOrderById } from "@/lib/orders"
 
 interface OrderConfirmationPageProps {
   params: {
-    id: string
+    sku: string
   }
 }
 

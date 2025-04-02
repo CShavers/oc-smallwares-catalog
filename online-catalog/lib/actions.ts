@@ -5,15 +5,15 @@ import { v4 as uuidv4 } from "uuid"
 import { getCart, clearCart } from "./cart"
 import { products } from "./products"
 
-export async function addToCart(productId: string, quantity = 1) {
+export async function addToCart(productSku: string, quantity = 1) {
   const cart = await getCart()
-  const product = products.find((p) => p.id === productId)
+  const product = products.find((p) => p.id === productSku)
 
   if (!product) {
     throw new Error("Product not found")
   }
 
-  const existingItemIndex = cart.items.findIndex((item) => item.productId === productId)
+  const existingItemIndex = cart.items.findIndex((item) => item.productSku === productSku)
 
   if (existingItemIndex >= 0) {
     // Update quantity if item already exists
@@ -22,7 +22,7 @@ export async function addToCart(productId: string, quantity = 1) {
     // Add new item
     cart.items.push({
       id: uuidv4(),
-      productId,
+      productSku,
       name: product.name,
       price: product.price,
       quantity,

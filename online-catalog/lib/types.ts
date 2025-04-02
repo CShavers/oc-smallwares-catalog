@@ -1,5 +1,5 @@
 export interface Product {
-  id: string
+  sku: string
   name: string
   description: string
   price: number
@@ -7,8 +7,8 @@ export interface Product {
 }
 
 export interface CartItem {
-  id: string
-  productId: string
+  sku: string
+  productSku: string
   name: string
   price: number
   quantity: number
@@ -34,7 +34,7 @@ export interface PaymentDetails {
 }
 
 export interface Order {
-  id: string
+  sku: string
   items: CartItem[]
   total: number
   shippingAddress: ShippingAddress

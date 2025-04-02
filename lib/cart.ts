@@ -1,15 +1,24 @@
-import type { Cart } from "./types"
+import type { Cart, CartItem } from "./types";
 
-// In a real app, this would be stored in a database
-let cart: Cart = { items: [] }
+let cart: Cart = { items: [] };
 
 export async function getCart(): Promise<Cart> {
-  // In a real app, you would fetch the cart from a database or API
-  // For this example, we'll use a simple in-memory cart
-  return cart
+  return cart;
 }
 
 export async function clearCart() {
-  cart = { items: [] }
+  cart = { items: [] };
 }
 
+// Add this missing function:
+export async function addToCart(productSku: string, quantity: number): Promise<Cart> {
+  const existingItem = cart.items.find((item) => item.productSku === productSku);
+
+  if (existingItem) {
+    existingItem.quantity += quantity;
+  } else {
+    cart.items.push({ productSku, quantity });
+  }
+
+  return cart;
+}
