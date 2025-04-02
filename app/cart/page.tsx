@@ -1,42 +1,72 @@
-import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import CartItems from "@/components/cart-items"
-import CartSummary from "@/components/cart-summary"
-import { getCart } from "@/lib/cart"
+'use client'
 
-export default async function CartPage() {
-  const cart = await getCart()
-  const isEmpty = cart.items.length === 0
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { getCart, clearCart } from '@/lib/cart'
+import { CartItem } from '@/lib/types'
+import { Button } from '@/components/ui/button'
+
+export default function CartPage() {
+  const [items, setItems] = useState<CartItem[]>([])
+  const router = useRouter()
+
+  useEffect(() => {
+    const cartItems = getCart()
+    if (Array.isArray(cartItems)) {
+      setItems(cartItems)
+    } else {
+      setItems([])
+    }
+  }, [])
+
+  const handleClear = () => {
+    clearCart()
+    setItems([])
+  }
+
+  const handlePlaceOrder = () => {
+    // Placeholder logic - you can expand later
+    alert('Order placed! (Simulated)')
+    clearCart()
+    setItems([])
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Link href="/" className="inline-flex items-center mb-6 text-sm font-medium">
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Continue shopping
-      </Link>
+    <div className="p-6 max-w-4xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Your Cart</h1>
+        <Button variant="outline" onClick={() => router.push('/')}>Back to Catalog</Button>
+      </div>
 
-      <h1 className="text-3xl font-bold mb-8">Your Cart</h1>
-
-      {isEmpty ? (
-        <div className="text-center py-12">
-          <h2 className="text-xl font-medium mb-4">Your cart is empty</h2>
-          <p className="text-muted-foreground mb-6">Looks like you haven't added anything to your cart yet.</p>
-          <Link href="/">
-            <Button>Browse Products</Button>
-          </Link>
-        </div>
+      {items.length === 0 ? (
+        <p>Your cart is empty.</p>
       ) : (
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="md:col-span-2">
-            <CartItems items={cart.items} />
+        <>
+          <ul className="space-y-4 mb-6">
+            {items.map((item) => (
+              <li key={item.sku} className="flex items-center justify-between border-b pb-2">
+                <div>
+                  <div className="font-semibold">{item.name}</div>
+                  <div className="text-sm text-gray-600">SKU: {item.sku}</div>
+                  <div className="text-sm">Qty: {item.quantity}</div>
+                </div>
+                {item.image && (
+                  <img src={item.image} alt={item.name} className="h-16 w-16 object-contain" />
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex gap-4">
+            <Button variant="destructive" onClick={handleClear}>
+              Clear Cart
+            </Button>
+            <Button onClick={handlePlaceOrder}>
+              Place Order
+            </Button>
           </div>
-          <div>
-            <CartSummary cart={cart} />
-          </div>
-        </div>
+        </>
       )}
     </div>
   )
 }
-

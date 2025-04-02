@@ -1,24 +1,35 @@
-import type { Cart, CartItem } from "./types";
+import { CartItem } from './types'
 
-let cart: Cart = { items: [] };
+const CART_KEY = 'oc_smallwares_cart'
 
-export async function getCart(): Promise<Cart> {
-  return cart;
+export function getCart(): CartItem[] {
+  if (typeof window === 'undefined') return []
+  const data = localStorage.getItem('oc_smallwares_cart')
+  try {
+    return data ? JSON.parse(data) : []
+  } catch {
+    return []
+  }
 }
 
-export async function clearCart() {
-  cart = { items: [] };
-}
+export function addToCart(item: CartItem) {
+  if (typeof window === 'undefined') return
 
-// Add this missing function:
-export async function addToCart(productSku: string, quantity: number): Promise<Cart> {
-  const existingItem = cart.items.find((item) => item.productSku === productSku);
+  const cart = getCart()
+  const existing = cart.find((i) => i.sku === item.sku)
 
-  if (existingItem) {
-    existingItem.quantity += quantity;
+  if (existing) {
+    existing.quantity += item.quantity
   } else {
-    cart.items.push({ productSku, quantity });
+    cart.push(item)
   }
 
-  return cart;
+  localStorage.setItem(CART_KEY, JSON.stringify(cart))
 }
+
+export function clearCart() {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('oc_smallwares_cart')
+  }
+}
+
