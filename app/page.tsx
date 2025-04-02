@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import productsData from '@/lib/products.json'
-import { Product } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { addToCart } from '@/lib/cart'
 import { Input } from '@/components/ui/input'
 
 export default function Page() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<any[]>([])
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -17,8 +16,8 @@ export default function Page() {
 
   const filteredProducts = products.filter(
     (p) =>
-      p.Name?.toLowerCase().includes(search.toLowerCase()) ||
-      p.SKU?.toLowerCase().includes(search.toLowerCase())
+      p.name?.toLowerCase().includes(search.toLowerCase()) ||
+      p.sku?.toLowerCase().includes(search.toLowerCase())
   )
 
   return (
@@ -35,18 +34,18 @@ export default function Page() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {filteredProducts.map((product) => (
-          <div key={product.SKU} className="bg-white rounded-2xl shadow-md overflow-hidden p-4">
+          <div key={product.sku} className="bg-white rounded-2xl shadow-md overflow-hidden p-4">
             <img
               src={product.image}
-              alt={product.Name}
+              alt={product.name}
               className="w-full h-48 object-contain mb-4"
               onError={(e) => {
                 e.currentTarget.src = '/images/image-placeholder.png'
               }}
             />
-            <div className="text-sm text-gray-500 mb-1">SKU: {product.SKU}</div>
-            <div className="text-lg font-semibold">{product.Name}</div>
-            <p className="text-sm text-gray-600 mt-2">{product.Description}</p>
+            <div className="text-sm text-gray-500 mb-1">SKU: {product.sku}</div>
+            <div className="text-lg font-semibold">{product.name}</div>
+            <p className="text-sm text-gray-600 mt-2">{product.description}</p>
             <div className="mt-4 flex justify-end">
               <Button onClick={() => addToCart(product)}>Add to Cart</Button>
             </div>
