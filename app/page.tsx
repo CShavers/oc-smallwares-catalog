@@ -6,7 +6,7 @@ import productsData from '@/lib/products.json'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useCart } from '@/lib/useCart'
-import { InquiryForm } from '@/lib/useCart'
+import { InquiryForm, useCart } from '@/lib/useCart'
 
 export default function Page() {
   const { addToCart } = useCart()
