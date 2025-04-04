@@ -1,19 +1,21 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Product } from '@/lib/useCart'
 import productsData from '@/lib/products.json'
 import { Button } from '@/components/ui/button'
-import { addToCart } from '@/lib/cart'
 import { Input } from '@/components/ui/input'
+import { useCart } from '@/lib/useCart'
+import { InquiryForm } from '@/lib/useCart'
 
 export default function Page() {
-  const [products, setProducts] = useState<any[]>([])
+  const { addToCart } = useCart()
+  const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
-  const [quantities, setQuantities] = useState<{ [sku: string]: number }>({})
   const [hydrated, setHydrated] = useState(false)
+  const [quantities, setQuantities] = useState<Record<string, number>>({})
 
   useEffect(() => {
-    // Only run on client
     setProducts(productsData)
     setHydrated(true)
   }, [])
@@ -28,18 +30,25 @@ export default function Page() {
     setQuantities((prev) => ({ ...prev, [sku]: value }))
   }
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: Product) => {
     const quantity = quantities[product.sku] || 1
     addToCart({ ...product, quantity })
   }
 
-  if (!hydrated) return null // Avoid hydration mismatch
+  if (!hydrated) return null
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#458500] to-white p-4">
-      <h1 className="text-3xl font-bold text-white mb-4 text-center">
-        O'Charley's Smallwares Catalog
-      </h1>
+      <h1 className="text-3xl font-bold text-white mb-4 text-center">O&apos;Charley&apos;s Smallwares Catalog</h1>
+
+      <div className="text-right mb-4 max-w-6xl mx-auto flex justify-between items-center">
+        <InquiryForm />
+        <a href="/cart">
+          <Button className="bg-white text-[#458500] hover:bg-gray-100 font-semibold shadow">
+            View Cart
+          </Button>
+        </a>
+      </div>
 
       <div className="max-w-2xl mx-auto mb-6">
         <Input
@@ -49,10 +58,6 @@ export default function Page() {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full p-3 text-lg"
         />
-      </div>
-
-      <div className="flex justify-center mb-6">
-        <Button onClick={() => window.location.href = '/cart'}>View Cart</Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -69,13 +74,14 @@ export default function Page() {
             <div className="text-sm text-gray-500 mb-1">SKU: {product.sku}</div>
             <div className="text-lg font-semibold">{product.name}</div>
             <p className="text-sm text-gray-600 mt-2">{product.description}</p>
-            <div className="mt-4 flex items-center gap-2">
+
+            <div className="flex items-center mt-4 gap-2">
               <Input
                 type="number"
                 min={1}
                 value={quantities[product.sku] || 1}
                 onChange={(e) => handleQuantityChange(product.sku, parseInt(e.target.value))}
-                className="w-20"
+                className="w-16"
               />
               <Button onClick={() => handleAddToCart(product)}>Add to Cart</Button>
             </div>
