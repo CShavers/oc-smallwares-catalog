@@ -1,18 +1,16 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import ClientLayout from './ClientLayout'
-
-export const metadata: Metadata = {
-  title: "O'Charley's Smallwares Catalog",
-  description: 'Created with v0',
-}
+import './globals.css';
+import { Toaster } from 'react-hot-toast';
+import { CartProvider } from '@/lib/useCart';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <ClientLayout>{children}</ClientLayout>
+        <CartProvider>
+          <Toaster position="top-right" />
+          {children}
+        </CartProvider>
       </body>
     </html>
-  )
+  );
 }
